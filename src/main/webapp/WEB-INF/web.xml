@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+   version="2.5">
+<!-- This is Google App Engine's "Deployment Descriptor" for Java web applications. -->
+    <!-- What Java code do we use to serve requests. --> 
+    <servlet>
+        <servlet-name>sudoku</servlet-name>
+        <servlet-class>com.google.appengine.sudoku.SudokuServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!-- The mapping URL -> Servlet. We let all URLs be handled by the same servlet. -->
+    <servlet-mapping>
+        <servlet-name>sudoku</servlet-name>
+        <url-pattern>/sudoku</url-pattern>
+    </servlet-mapping>
+</web-app>
+

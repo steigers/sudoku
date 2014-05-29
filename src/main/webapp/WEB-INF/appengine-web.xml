@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+<!-- This file is in addition to web.xml (Google App Engine + Java web app).
+     It specifies the app's registered application ID and the version ID of the latest code,
+     and says which files in the app's WAR are static files (like images) and which are
+     resource files used by the application. -->
+<application>sebsudoku</application>
+    <version>1</version>
+    <threadsafe>true</threadsafe>
+
+    <system-properties>
+      <property
+        name="java.util.logging.config.file"
+        value="WEB-INF/logging.properties"/>
+    </system-properties>
+</appengine-web-app>
+
