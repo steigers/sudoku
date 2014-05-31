@@ -4,7 +4,7 @@
      It specifies the app's registered application ID and the version ID of the latest code,
      and says which files in the app's WAR are static files (like images) and which are
      resource files used by the application. -->
-<application>INSERT YOUR APPENGINE IDENTIFIER HERE!</application>
+<application>sebsudoku</application>
     <version>1</version>
     <threadsafe>true</threadsafe>
 
