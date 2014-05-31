@@ -9,27 +9,17 @@
 
     <!-- CSS formatting of some HTML elements. -->
     <style type="text/css">
-      #sudoku-table input {
-        float: left;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        width:34px; height:24px;
-        text-align:center;
-        vertical-align:middle;
-        font-size: 16pt;
-        -webkit-border-radius:0px;
-      }
       .mt {
-        border-top:thick solid #000000;
+        border-top: 4px solid #000000;
       }
       .mr {
-        border-right:thick solid #000000;
+        border-right: 4px solid #000000;
       }
       .ml {
-        border-left:thick solid #000000;
+        border-left: 4px solid #000000;
       }
       .mb {
-        border-bottom:thick solid #000000;
+        border-bottom: 4px solid #000000;
       }
       select {
         font-size: 16pt;
@@ -40,6 +30,16 @@
       }
       table {
         border-collapse: collapse;
+      }
+      table input {
+        float: left;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        width:34px; height:24px;
+        text-align:center;
+        vertical-align:middle;
+        font-size: 16pt;
+        border: 1px solid #000000;
       }
       td {
       }
@@ -165,10 +165,10 @@
           <td><input type="text" id="cell71" class="ml mt" value="" /></td>
           <td><input type="text" id="cell72" class="mt"    value="" /></td>
           <td><input type="text" id="cell73" class="mt"    value="" /></td>
-          <td><input type="text" id="cell74" class="mt mt" value="" /></td>
+          <td><input type="text" id="cell74" class="ml mt" value="" /></td>
           <td><input type="text" id="cell75" class="mt"    value="" /></td>
           <td><input type="text" id="cell76" class="mt"    value="" /></td>
-          <td><input type="text" id="cell77" class="mt ml" value="" /></td>
+          <td><input type="text" id="cell77" class="ml mt" value="" /></td>
           <td><input type="text" id="cell78" class="mt"    value="" /></td>
           <td><input type="text" id="cell79" class="mt mr" value="" /></td>
         </tr>
