@@ -10,97 +10,10 @@ public class SudokuSolver
   private static final Logger LOG = Logger.getLogger(
       SudokuSolver.class.getName());
 
-  // Checks whether there is no direct contradition to numbers[row][col]==candidate.
-  private static boolean isCandidate(int[][] numbers, int row, int col, int candidate) {
-    assert row >= 0 && row < 9 && col >= 0 && col < 9 && candidate >= 1 && candidate <= 9;
-    for (int i = 0; i < 9; ++i) {
-      if (i == row) {
-        continue;
-      }
-      if (numbers[i][col] == candidate) {
-        // LOG.info("(" + row + "," + col + "): " + candidate +
-        //          " not possible (same row, i=" + i + ").");
-        return false;
-      }
-    }
-    for (int j = 0; j < 9; ++j) {
-      if (j == col) {
-        continue;
-      }
-      if (numbers[row][j] == candidate) {
-        // LOG.info("(" + row + "," + col + "): " + candidate +
-        //          " not possible (same col, j=" + j + ").");
-        return false;
-      }
-    }
-    int rstart = (row / 3) * 3;
-    int cstart = (col / 3) * 3;
-    assert row >= rstart && row <= rstart + 2 && col >= cstart && col <= cstart + 2;
-    for (int i = rstart; i < rstart + 3; ++i) {
-      for (int j = cstart; j < cstart + 3; ++j) {
-        if (i == row && j == col) {
-          continue;
-        }
-        if (numbers[i][j] == candidate) {
-          // LOG.info("(" + row + "," + col + "): " + candidate +
-          //          " not possible (same block, i=" + i + " j=" + j + ").");
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-  
-  // Gets all the possible values for numbers[row][col].
-  private static ArrayList<Integer> getCandidates(int[][] numbers, int row, int col) {
-    ArrayList<Integer> result = new ArrayList<Integer>();
-    for (int c = 1; c <= 9; ++c) {
-      if (isCandidate(numbers, row, col, c)) {
-        result.add(c);
-      }
-    }
-    // LOG.info("(" + row + "," + col + ") has " + result.size() + " candidates.");
-    return result;
-  }
-  
-  // Overwrites 'output' with 'input' (both should be 9x9 matrices).
-  private static void copy(int[][] input, int[][] output) {
-    for (int i = 0; i < 9; ++i) {
-      for (int j = 0; j < 9; ++j) {
-        output[i][j] = input[i][j];
-      }
-    }
-  }
-
-  // Checks if all fields of 'numbers' are set.
-  private static int numUnsolvedFields(int[][] numbers) {
-    int result = 0;
-    for (int i = 0; i < 9; ++i) {
-      for (int j = 0; j < 9; ++j) {
-        if (numbers[i][j] == 0) {
-          ++result;
-        }
-      }
-    }
-    return result;
-  }
-
-  private static String getString(int[][] numbers) {
-    String result = "";
-    for (int i = 0; i < 9; ++i) {
-      for (int j = 0; j < 9; ++j) {
-        result += numbers[i][j];
-        if (i < 8 || j < 8) {  // No comma after last number.
-          result += ",";
-        }
-      }
-    }
-    return result;
-  }
-  
-  // Solves the sudoku given by 'numbers'.
+  // Solves the sudoku given by the 9x9 array 'numbers'.
   // Returns true if the sudoku was solved (and the entire solution is
   // stored in 'numbers'), false if it was unsolvable.
+  // We have the convention that if a field is not known, 0 is stored.
   public static boolean solveSudoku(int[][] numbers) {
     LOG.info("solveSudoku: " + getString(numbers));
       
@@ -110,7 +23,7 @@ public class SudokuSolver
       return true;
     }
 
-    // Store a list of possible values of every field in 'candidates'.
+    // candidates[i][j] stores a list of possible values of field (i,j) in the sudoku.
     ArrayList<Integer>[][] candidates = (ArrayList<Integer>[][]) new ArrayList[9][9];
     for (int i = 0; i < 9; ++i) {
       for (int j = 0; j < 9; ++j) {
@@ -136,13 +49,15 @@ public class SudokuSolver
       }
     }
 
+    // Maybe getCandidates found only one candidate per missing field.
+    // Then we have found the full solution.
     if (numUnsolvedFields(numbers) == 0) {
       LOG.info("Done! (2)");
       return true;
     }
     LOG.info(numUnsolvedFields(numbers) + " fields remaining.");
     
-    // There is no easy solution, we will set some field to one to one of
+    // OK, there is no easy solution. We will try and set some field to one of
     // its candidates and see if it can be solved with that.
     
     // Create a copy of the input.
@@ -192,5 +107,93 @@ public class SudokuSolver
         LOG.info("Try again.");
       }
     } 
+  }
+  
+  // Gets all the possible values for numbers[row][col].
+  private static ArrayList<Integer> getCandidates(int[][] numbers, int row, int col) {
+    ArrayList<Integer> result = new ArrayList<Integer>();
+    for (int c = 1; c <= 9; ++c) {
+      if (isCandidate(numbers, row, col, c)) {
+        result.add(c);
+      }
+    }
+    // LOG.info("(" + row + "," + col + ") has " + result.size() + " candidates.");
+    return result;
+  }
+
+  // Checks if there is a direct contradiction to numbers[row][col]==candidate.
+  private static boolean isCandidate(int[][] numbers, int row, int col, int candidate) {
+    assert row >= 0 && row < 9 && col >= 0 && col < 9 && candidate >= 1 && candidate <= 9;
+    for (int i = 0; i < 9; ++i) {
+      if (i == row) {
+        continue;
+      }
+      if (numbers[i][col] == candidate) {
+        // LOG.info("(" + row + "," + col + "): " + candidate +
+        //          " not possible (same row, i=" + i + ").");
+        return false;
+      }
+    }
+    for (int j = 0; j < 9; ++j) {
+      if (j == col) {
+        continue;
+      }
+      if (numbers[row][j] == candidate) {
+        // LOG.info("(" + row + "," + col + "): " + candidate +
+        //          " not possible (same col, j=" + j + ").");
+        return false;
+      }
+    }
+    int rstart = (row / 3) * 3;
+    int cstart = (col / 3) * 3;
+    assert row >= rstart && row <= rstart + 2 && col >= cstart && col <= cstart + 2;
+    for (int i = rstart; i < rstart + 3; ++i) {
+      for (int j = cstart; j < cstart + 3; ++j) {
+        if (i == row && j == col) {
+          continue;
+        }
+        if (numbers[i][j] == candidate) {
+          // LOG.info("(" + row + "," + col + "): " + candidate +
+          //          " not possible (same block, i=" + i + " j=" + j + ").");
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  // Checks if all fields of 'numbers' are set.
+  private static int numUnsolvedFields(int[][] numbers) {
+    int result = 0;
+    for (int i = 0; i < 9; ++i) {
+      for (int j = 0; j < 9; ++j) {
+        if (numbers[i][j] == 0) {
+          ++result;
+        }
+      }
+    }
+    return result;
+  }
+  
+  // Overwrites 'output' with 'input' (both should be 9x9 matrices).
+  private static void copy(int[][] input, int[][] output) {
+    for (int i = 0; i < 9; ++i) {
+      for (int j = 0; j < 9; ++j) {
+        output[i][j] = input[i][j];
+      }
+    }
+  }
+
+  private static String getString(int[][] numbers) {
+    String result = "";
+    for (int i = 0; i < 9; ++i) {
+      for (int j = 0; j < 9; ++j) {
+        result += numbers[i][j];
+        if (i < 8 || j < 8) {  // No comma after last number.
+          result += ",";
+        }
+      }
+    }
+    return result;
   }
 }

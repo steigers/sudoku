@@ -1,5 +1,11 @@
 This is an educational project to build a web app to solve sudokus using Java and Google App Engine.
 
+
+Tutorial
+--------
+http://www.tildee.com/4QY3th
+
+
 Files
 -----
 

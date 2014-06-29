@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <%
-  // Get the string that we have set via setAttribute("values") in the Java code.
-  final String values = (String) request.getAttribute("values");
+  // Get the string that we have set via setAttribute("values_from_java") in the Java code.
+  final String java_values = (String) request.getAttribute("values_from_java");
 %>
 <html>
   <head>
@@ -51,7 +51,9 @@
     </style>
 
     <script type="text/javascript">
-      function getValues() {
+      // This function gets the values from cell11, cell12, cell13...
+      // creates a comma-separated string and saves it to the 'values-to-solve' element.
+      function transferValues() {
         var result = '';
         for (var i = 1; i <= 9; i++) {    // Row index (1...9).
           for (var j = 1; j <= 9; j++) {  // Column index (1..9).
@@ -70,8 +72,10 @@
         cell.value = result;
       }
 
+      // This function reads the 'values-received' element, parses the cell values
+      // and puts them into the cell11, cell12, cell13... elements.
       function setValues() {
-        var cell = document.getElementById('sudoku-vals');
+        var cell = document.getElementById('values-received');
         var values = cell.value.split(',');
         var i = 1;  // Row index (1..9).
         var j = 1;  // Column index (1..9).
@@ -197,12 +201,14 @@
       </table>
     </div>
     <form name="solve_form" action="/sudoku" method="get">
-      <!-- The value of this tag is transferred to the textXY fields by setValues(). -->
-      <input id="sudoku-vals" type="hidden" name="values" value=<%= values %> />
+      <!-- The value of this tag is transferred to the cellXY fields by setValues(). -->
+      <input id="values-received" type="hidden" name="values" value=<%= java_values %> />
+
       <!-- The value of this tag is set by getValues() and used in the Java code. -->
       <input id="values-to-solve" type="hidden" name="solve" value="" />
-      <!-- Clicking on this button will trigger a GET request with parameter solve=2,,3,1,9,5,,.. -->
-      <input id="solve-button" type="submit" value="Solve!" onclick="javascript:getValues();" />
+
+      <!-- Clicking on this button will trigger a GET request with parameter solve=2,,3,1,9,5,... -->
+      <input id="solve-button" type="submit" value="Solve!" onclick="javascript:transferValues();" />
     </form>
   </body>
 </html>

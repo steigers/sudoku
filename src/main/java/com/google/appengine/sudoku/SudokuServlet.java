@@ -65,7 +65,7 @@ public class SudokuServlet extends HttpServlet {
     } else {
       LOG.info("Displaying default sudoku.");
       // Display a default, unsolved sudoku.
-      req.setAttribute("values", DEFAULT_SUDOKU_TWO);
+      req.setAttribute("values_from_java", DEFAULT_SUDOKU_TWO);
     }
     // Forward the request (with "values" set) to display.jsp.
     req.getRequestDispatcher("display.jsp").forward(req, resp);
@@ -117,9 +117,9 @@ public class SudokuServlet extends HttpServlet {
   private void sudokuHandler(HttpServletRequest req) {  
     // This method should only be called if there is a parameter
     // solve=1,2,,4,1,8,,,6,,,,,
-    String values = req.getParameter("solve");
-    assert values != null;
-    parseString(values, sudokuNumbers);
+    String values_from_user = req.getParameter("solve");
+    assert values_from_user != null;
+    parseString(values_from_user, sudokuNumbers);
     LOG.log(Level.INFO, "Called sudokuHandler with " + getString(sudokuNumbers));
     
     // Solve!
@@ -130,14 +130,7 @@ public class SudokuServlet extends HttpServlet {
     }
     
     // Transfer the solution to a comma-delimited string.
-    // Set the "values" attribute in the HTTP request.
-    req.setAttribute("values", getString(sudokuNumbers));
- 
-    try {
-      return;
-    } catch (RuntimeException e) {
-      LOG.log(Level.SEVERE, "Failed to add ", e);
-      LOG.log(Level.SEVERE, "e.getMessage()=" + e.getMessage());
-    }
+    // Set the "values_from_java" attribute for use in the .JSP template.
+    req.setAttribute("values_from_java", getString(sudokuNumbers));
   }
 }
